@@ -2,6 +2,8 @@
 
 A full-stack Sweet Shop Management System built using **TypeScript**, following **Test-Driven Development (TDD)** principles. The application supports role-based access, inventory management, and a modern, responsive UI.
 
+**Deployed Link** : https://sweet--shop.vercel.app/
+
 ---
 
 ## 🚀 Project Overview
