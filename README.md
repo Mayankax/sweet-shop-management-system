@@ -82,15 +82,15 @@ This system allows **users** to browse and purchase sweets, while **admin users*
 ### Login & Register
 | Login | Register |
 | :---: | :---: |
-| ![Login](screenshots/image1.png) | ![Register](screenshots/image2.png) |
+| ![Login](screenshots/image2.png) | ![Register](screenshots/image1.png) |
 
 ### User Dashboard & Admin Dashboard
 | User Dashboard | Admin Dashboard |
 | :---: | :---: |
-| ![User Dashboard](screenshots/image3.png) | ![Admin Dashboard](screenshots/image4.png) |
+| ![User Dashboard](screenshots/image5.png) | ![Admin Dashboard](screenshots/image3.png) |
 
 ### Add / Edit Sweet (Blur Modal)
-![Admin Modal](screenshots/image5.png)
+![Admin Modal](screenshots/image4.png)
 
 ---
 
