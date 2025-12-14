@@ -12,7 +12,11 @@ export const createSweet = async (
 };
 
 export const getAllSweets = async () => {
-  return prisma.sweet.findMany();
+  return prisma.sweet.findMany({
+    orderBy: {
+      createdAt: "asc"
+    }
+  });
 };
 
 export const searchSweets = async (filters: any) => {

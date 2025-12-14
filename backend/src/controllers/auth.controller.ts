@@ -10,13 +10,18 @@ export const register = async (req: Request, res: Response) => {
   }
 
   try {
-    const token = await registerUser(
+    const { token, user } = await registerUser(
       parsed.data.name,
       parsed.data.email,
       parsed.data.password
     );
 
-    res.status(201).json({ token });
+    res.status(201).json({
+      token,
+      user: {
+        role: user.role
+      }
+    });
   } catch (err: any) {
     if (err.message === "EMAIL_EXISTS") {
       return res.status(409).json({ message: "Email already in use" });
@@ -34,9 +39,19 @@ export const login = async (req: Request, res: Response) => {
   }
 
   try {
-    const token = await loginUser(parsed.data.email, parsed.data.password);
-    res.status(200).json({ token });
+    const { token, user } = await loginUser(
+      parsed.data.email,
+      parsed.data.password
+    );
+
+    res.status(200).json({
+      token,
+      user: {
+        role: user.role
+      }
+    });
   } catch {
     res.status(401).json({ message: "Invalid credentials" });
   }
 };
+

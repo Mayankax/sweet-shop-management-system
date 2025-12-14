@@ -1,14 +1,24 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {prisma} from "../utils/prisma";
+import { prisma } from "../utils/prisma";
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
+
+interface AuthResponse {
+  token: string;
+  user: {
+    id: string;
+    role: string;
+    email: string;
+    name: string;
+  };
+}
 
 export const registerUser = async (
   name: string,
   email: string,
   password: string
-) => {
+): Promise<AuthResponse> => {
   const existingUser = await prisma.user.findUnique({ where: { email } });
 
   if (existingUser) {
@@ -25,14 +35,19 @@ export const registerUser = async (
     }
   });
 
-  return jwt.sign(
+  const token = jwt.sign(
     { userId: user.id, role: user.role },
     JWT_SECRET,
     { expiresIn: "1h" }
   );
+
+  return { token, user };
 };
 
-export const loginUser = async (email: string, password: string) => {
+export const loginUser = async (
+  email: string,
+  password: string
+): Promise<AuthResponse> => {
   const user = await prisma.user.findUnique({ where: { email } });
 
   if (!user) {
@@ -45,9 +60,11 @@ export const loginUser = async (email: string, password: string) => {
     throw new Error("INVALID_CREDENTIALS");
   }
 
-  return jwt.sign(
+  const token = jwt.sign(
     { userId: user.id, role: user.role },
     JWT_SECRET,
     { expiresIn: "1h" }
   );
+
+  return { token, user };
 };

@@ -1,45 +1,38 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import { createContext, useContext, useState } from "react";
 
 type User = {
-  role: "USER" | "ADMIN";
-};
-
-type TokenPayload = {
   role: "USER" | "ADMIN";
 };
 
 type AuthContextType = {
   token: string | null;
   user: User | null;
-  login: (token: string) => void;
+  login: (token: string, user: User) => void;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(
     localStorage.getItem("token")
   );
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(
+    JSON.parse(localStorage.getItem("user") || "null")
+  );
 
-  useEffect(() => {
-    if (token) {
-      const decoded = jwtDecode<TokenPayload>(token);
-      setUser({ role: decoded.role });
-    }
-  }, [token]);
-
-  const login = (token: string) => {
-    localStorage.setItem("token", token);
+  const login = (token: string, user: User) => {
     setToken(token);
+    setUser(user);
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
     setToken(null);
     setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
 
   return (
@@ -47,6 +40,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => useContext(AuthContext)!;
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error("useAuth must be used inside AuthProvider");
+  }
+  return ctx;
+}
