@@ -142,6 +142,7 @@ All core business logic is covered with automated tests.
 ```bash
 cd backend
 npm test
+```
 
 
 ## ✅ Successful Test Run Coverage
