@@ -2,6 +2,7 @@ import type { Sweet } from "../../hooks/useSweets";
 import { useAuth } from "../../auth/AuthContext";
 import api from "../../api/axios";
 import { useState } from "react";
+import { Pencil, Trash2, PackagePlus } from "lucide-react";
 
 export default function SweetCard({
   sweet,
@@ -27,59 +28,85 @@ export default function SweetCard({
       { quantity: restockQty }
     );
 
-    onRestock(res.data); // ✅ update only this sweet
+    onRestock(res.data);
     setRestockQty(0);
   };
 
   return (
-    <div className="border rounded-lg p-4 bg-white shadow-sm">
-      <h3 className="text-lg font-semibold">{sweet.name}</h3>
-      <p className="text-sm text-gray-600">{sweet.category}</p>
-      <p className="font-medium">₹ {sweet.price}</p>
-      <p>Stock: {sweet.quantity}</p>
+    <div className="rounded-xl border-4 border-gray-50 bg-white shadow-sm hover:shadow-md transition p-4 flex flex-col gap-3">
+      {/* HEADER */}
+      <div className="flex justify-between items-start">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">
+            {sweet.name}
+          </h3>
+          <p className="text-sm text-gray-500">{sweet.category}</p>
+        </div>
 
+        {/* ADMIN ACTIONS (ICON ONLY) */}
+        {user?.role === "ADMIN" && (
+          <div className="flex gap-2 text-gray-500">
+            <button
+              onClick={() => onEdit(sweet)}
+              className="hover:text-blue-600 transition"
+              title="Edit"
+            >
+              <Pencil size={18} />
+            </button>
+
+            <button
+              onClick={() => onDelete(sweet.id)}
+              className="hover:text-red-600 transition"
+              title="Delete"
+            >
+              <Trash2 size={18} />
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* INFO */}
+      <div className="flex justify-between items-center">
+        <span className="font-medium text-gray-800">₹ {sweet.price}</span>
+        <span
+          className={`text-sm ${
+            sweet.quantity === 0
+              ? "text-red-600"
+              : "text-green-600"
+          }`}
+        >
+          Stock: {sweet.quantity}
+        </span>
+      </div>
+
+      {/* PURCHASE */}
       <button
         disabled={sweet.quantity === 0}
         onClick={onPurchase}
-        className="mt-2 w-full bg-green-600 text-white py-2 rounded disabled:bg-gray-400"
+        className="mt-1 w-full rounded-lg border border-green-600 text-green-700 py-2 font-medium hover:bg-green-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Purchase
       </button>
 
-      {/* ADMIN ONLY */}
+      {/* ADMIN RESTOCK */}
       {user?.role === "ADMIN" && (
-        <div className="mt-3 space-y-2">
+        <div className="flex items-center gap-2 mt-2">
+          <input
+            type="number"
+            min={1}
+            placeholder="Qty"
+            className="border rounded-lg px-2 py-1 w-full text-sm"
+            value={restockQty}
+            onChange={(e) => setRestockQty(Number(e.target.value))}
+          />
           <button
-            className="bg-yellow-500 text-white w-full py-1 rounded"
-            onClick={() => onEdit(sweet)}
+            onClick={restock}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg border text-sm text-gray-700 hover:bg-gray-100 transition"
+            title="Restock"
           >
-            Update
+            <PackagePlus size={16} />
+            Add
           </button>
-
-          <button
-            className="bg-red-600 text-white w-full py-1 rounded"
-            onClick={() => onDelete(sweet.id)}
-          >
-            Delete
-          </button>
-
-          {/* RESTOCK */}
-          <div className="flex gap-2">
-            <input
-              type="number"
-              min={1}
-              placeholder="Qty"
-              className="border p-1 w-full"
-              value={restockQty}
-              onChange={(e) => setRestockQty(Number(e.target.value))}
-            />
-            <button
-              className="bg-blue-600 text-white px-3 rounded"
-              onClick={restock}
-            >
-              Restock
-            </button>
-          </div>
         </div>
       )}
     </div>
