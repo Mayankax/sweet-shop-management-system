@@ -21,44 +21,50 @@ export default function SweetEditModal({
       category,
       price
     });
+
     onSuccess(res.data);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-      <div className="bg-white p-6 rounded w-96 space-y-3">
-        <h3 className="font-bold">Update Sweet</h3>
+    <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex items-center justify-center z-50">
+      <div className="bg-white/90 backdrop-blur rounded-xl p-6 w-96 space-y-4 shadow-xl">
+        <h3 className="text-lg font-semibold text-gray-800">
+          Update Sweet
+        </h3>
 
         <input
-          className="border p-2 w-full"
+          className="border rounded-lg p-2 w-full"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
+
         <input
-          className="border p-2 w-full"
+          className="border rounded-lg p-2 w-full"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         />
+
         <input
           type="number"
-          className="border p-2 w-full"
+          className="border rounded-lg p-2 w-full"
           value={price}
           onChange={(e) => setPrice(Number(e.target.value))}
         />
 
-        <div className="flex gap-2">
+        <div className="flex justify-end gap-2 pt-2">
           <button
-            className="bg-green-600 text-white px-4 py-2 rounded"
-            onClick={submit}
-          >
-            Save
-          </button>
-          <button
-            className="bg-gray-400 px-4 py-2 rounded"
             onClick={onClose}
+            className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100"
           >
             Cancel
+          </button>
+
+          <button
+            onClick={submit}
+            className="px-4 py-2 rounded-lg bg-gray-900 text-white hover:bg-gray-800"
+          >
+            Save
           </button>
         </div>
       </div>
