@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createSweet, getAllSweets } from "../services/sweets.service";
+import { createSweet, deleteSweet, getAllSweets, updateSweet } from "../services/sweets.service";
 import { searchSweets } from "../services/sweets.service";
 
 export const addSweet = async (req: Request, res: Response) => {
@@ -18,4 +18,15 @@ export const listSweets = async (_req: Request, res: Response) => {
 export const search = async (req: Request, res: Response) => {
   const sweets = await searchSweets(req.query);
   res.status(200).json(sweets);
+};
+
+
+export const update = async (req: Request, res: Response) => {
+  const sweet = await updateSweet(req.params.id, req.body);
+  res.status(200).json(sweet);
+};
+
+export const remove = async (req: Request, res: Response) => {
+  await deleteSweet(req.params.id);
+  res.status(204).send();
 };

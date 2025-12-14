@@ -29,3 +29,21 @@ export const searchSweets = async (filters: any) => {
     }
   });
 };
+
+
+export const updateSweet = async (
+  id: string,
+  data: { name: string; category: string; price: number }
+) => {
+  return prisma.sweet.update({
+    where: { id },
+    data
+  });
+};
+
+
+export const deleteSweet = async (id: string) => {
+  return prisma.sweet.delete({
+    where: { id }
+  });
+};
