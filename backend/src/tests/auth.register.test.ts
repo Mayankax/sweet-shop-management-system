@@ -1,5 +1,10 @@
 import request from "supertest";
 import app from "../app";
+import { clearDatabase } from "./testUtils";
+
+beforeEach(async () => {
+  await clearDatabase();
+});
 
 describe("Auth - Register", () => {
   it("should register a new user and return JWT", async () => {
